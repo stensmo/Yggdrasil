@@ -3,22 +3,25 @@
 using BinaryBuilder, Pkg
 
 name = "oneAPI_Support_Headers"
-version = v"2025.1.0"
+version = v"2025.3.1"
 
 # Collection of sources required to complete build
 sources = [
-    FileSource("https://files.pythonhosted.org/packages/44/5c/7bfaa300e5cdc6e50328c8e85f703a852a681db92c26aa31ee33ade51fd2/mkl_devel_dpcpp-2025.1.0-py2.py3-none-manylinux_2_28_x86_64.whl",
-               "92adbc773739a247b596844e8b6b2ec34adb3bb6e6de01e0889994cafd7ca5a9"; filename="oneapi-headers.whl"),
+    # https://pypi.org/project/onemkl-sycl-include/2025.3.1/
+    FileSource("https://files.pythonhosted.org/packages/79/70/d64211c4cf78490b273d449a7a4bd62e11a2a61c0b6b8dbef6b7c179c244/onemkl_sycl_include-2025.3.1-py2.py3-none-manylinux_2_28_x86_64.whl",
+               "8cf08d257ecf004f71f6c70b49da9793332daef7e556ab062f342071900fe435"; filename="oneapi-headers.whl"),
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir
 unzip -d oneapi-headers oneapi-headers.whl
-cd oneapi-headers/mkl_devel_dpcpp-2025.1.0.data/data
+cd oneapi-headers/onemkl_sycl_include-2025.3.1.data/data
 
 mkdir $includedir
 cp -r include/oneapi $includedir
+
+install_license $WORKSPACE/srcdir/oneapi-headers/onemkl_sycl_include-2025.3.1.dist-info/LICENSE.txt
 """
 
 # These are the platforms we will build for by default, unless further
@@ -34,4 +37,6 @@ products = [
 dependencies = Dependency[]
 
 # Build the tarballs, and possibly a `build.jl` as well.
-build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies)
+build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies;
+               julia_compat="1.6")
+

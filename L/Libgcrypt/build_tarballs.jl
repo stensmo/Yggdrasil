@@ -3,14 +3,12 @@
 using BinaryBuilder
 
 name = "Libgcrypt"
-version = v"1.11.0"
-# We bumped the version because we updated the dependencies to build for riscv64
-ygg_version = v"1.11.1"
+version = v"1.12.2"
 
 # Collection of sources required to build libgcrypt
 sources = [
     ArchiveSource("https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-$(version).tar.bz2",
-                  "09120c9867ce7f2081d6aaa1775386b98c2f2f246135761aae47d81f58685b9c"),
+                  "7ce33c2492221a0436f96a8500215e9f3e3dcb5fd26a757cd415e7a843babd5e"),
 ]
 
 # Bash recipe for building across all platforms
@@ -47,9 +45,9 @@ products = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    Dependency("Libgpg_error_jll"; compat="1.51.1"),
+    Dependency("Libgpg_error_jll"; compat="1.58"),
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
-build_tarballs(ARGS, name, ygg_version, sources, script, platforms, products, dependencies;
+build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies;
                julia_compat="1.6")
